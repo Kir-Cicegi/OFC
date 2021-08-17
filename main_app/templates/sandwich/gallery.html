@@ -1,0 +1,38 @@
+{% extends '../base.html' %}
+{% load static %}
+
+{% block page_title %}Sandwich Gallery{% endblock %} 
+
+{% block content %}
+<article class="text-align-center">
+    <h1 class="page-headline">Sandwich Gallery</h1>
+    {% if gallery_type == 'user' %}
+        <div id="gallery-user-mini-profile">
+            <h3>Sandwiches Made By</h3>
+            <a href="/users/{{ profile_user.id }}">
+            {% if profile_user.profile.img_src %}
+                <img id="user-gallery-profile-image" src="{{ profile_user.profile.img_src }}" alt="{{ profile_user.username }}'s profile image">
+            {% else %}
+                <img id="user-gallery-profile-image" src="{% static 'images/profile-placeholder.png' %}" alt="{{ profile_user.username }}'s profile image">
+            {% endif %}
+                <h2>{{ profile_user.username }}</h2>
+            </a>
+        </div>
+    {% endif %}
+    
+    {% if user.is_authenticated %}
+    <a class="button" href="{% url 'sandwich_new' %}">Make a new sandwich!</a>
+    {% endif %}
+    <div id="gallery-grid">
+        {% if sandwiches.count %}
+            {% for sandwich in sandwiches %}
+                <a href="/sandwiches/{{ sandwich.id }}">   
+                    <img class="sandwich-gallery-thumbnail" src="{{ sandwich.thumbnail }}">
+                </a>
+            {% endfor %}
+        {% else %}
+            <h3>No sandwiches... yet.</h3>
+        {% endif %}
+    </div>
+</article>
+{% endblock %}

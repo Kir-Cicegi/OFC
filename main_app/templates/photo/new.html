@@ -1,0 +1,47 @@
+{% extends '../base.html' %}
+{% load static %}
+
+{% block add_to_head %}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/croppie.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/photo_cropper.css' %}">
+	<script defer src="{% static 'js/exif.js' %}"></script>	
+	<script defer src="{% static 'js/croppie.js' %}"></script>	
+	<script defer src="{% static 'js/photo_cropper.js' %}"></script>
+{% endblock add_to_head %}
+
+{% block page_title %}Add a photo{% endblock %}
+
+{% block content %}
+<article>
+	<h1 class="page-headline">Add A Photo</h1>
+
+	<div class="text-align-center">
+		<label class="button" id="croppieInputLabel" for="croppieInput">Choose Image</label>
+		<input class="hidden" type="file" accept="image/*" name="image" id="croppieInput" >
+	</div>
+
+	<div id="image-cropper">
+		<div id="status" class="hidden"></div>
+		<div id="croppie-container"></div>
+		<div id="croplines" class="hidden">
+			<div id="oval"></div>
+			<div id="center-line"></div>
+			<div id="mid-line" style="top:{{crop_mid}}%"></div>
+			<div id="low-line" style="top:{{crop_low}}%"></div>
+		</div>
+	</div>
+
+	<div id="croppie-actions" class="hidden text-align-center">
+		<p>Try to position the face so that the eyes and nose are in the center block, the face is contained in the oval and is centered along the vertical line. Use the slider to scale your photo and grab it to drag it around inside the box.</p>
+		<button class="croppie-rotate" data-deg="-90">Rotate Left</button>
+		<button class="croppie-rotate" data-deg="90">Rotate Right</button>
+		<div>
+			<button class="croppie-go">Looks good! Let's make face sandwiches!</button>
+		</div>	
+	</div>
+
+	<form id="upload-form" action="{% url 'photo_save' %}" enctype="multipart/form-data" method="post">
+		{% csrf_token %}
+	</form>
+</article>
+{% endblock %}

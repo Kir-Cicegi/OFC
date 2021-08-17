@@ -1,0 +1,126 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block page_title %}Sandwich Workshop{% endblock %}
+<article>
+{% block add_to_head %}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/workshop.css' %}">
+    <script>
+        let currentSandwich = {}
+        {% if from_photo %}
+            currentSandwich = {
+                top:{{from_photo.id}},
+                middle:{{from_photo.id}},
+                bottom:{{from_photo.id}},
+            }
+        {% elif edit_sandwich %}
+            const editSandwich = {
+                id:{{edit_sandwich.id}}
+            }
+            currentSandwich = {
+                top:{{edit_sandwich.top_id}},
+                middle:{{edit_sandwich.middle_id}},
+                bottom:{{edit_sandwich.bottom_id}},
+            }
+            {% elif from_sandwich %}
+            currentSandwich = {
+                top:{{from_sandwich.top_id}},
+                middle:{{from_sandwich.middle_id}},
+                bottom:{{from_sandwich.bottom_id}},
+            }
+        {% endif %}
+        const photos = {
+        {% for photo in photos %}
+            {{photo.id}}: {  
+                top: '{{photo.top}}',
+                middle: '{{photo.middle}}',
+                bottom: '{{photo.bottom}}', 
+            },
+        {% endfor %}
+        }        
+    </script>
+    <script defer src="{% static 'js/workshop.js' %}"></script>
+{% endblock add_to_head %}
+
+{% block content %}
+
+<h1 class="page-headline">Sandwich Workshop</h1>
+<div id="photo-btn-outer" class="text-align-center">
+    <a href="{% url 'photo_new' %}" class="button">Add a photo</a>
+</div>
+    <div class="scene">
+        <div class="arrs">
+            <button id="top-backward-arrow" class="arr arr-back"> &larr; </button>
+            <button id="top-forward-arrow" class="arr arr-forward"> &rarr; </button>
+        </div>
+        <div class="arrs">
+            <button id="middle-backward-arrow" class="arr arr-back"> &larr; </button>
+            <button id="middle-forward-arrow" class="arr arr-forward"> &rarr; </button>
+        </div>
+        <div class="arrs">
+            <button id="bottom-backward-arrow" class="arr arr-back"> &larr; </button>
+            <button id="bottom-forward-arrow" class="arr arr-forward"> &rarr; </button>
+        </div>
+
+        <div class="cubes">
+            <div class="cube" id="c1">
+                <div class="cube-face"> 
+                    {% if from_photo %}
+                        <img src="{{from_photo.top}}" alt="">
+                    {% elif edit_sandwich %}
+                        <img src="{{edit_sandwich.top.top}}" alt="">
+                    {% elif from_sandwich %}
+                        <img src="{{from_sandwich.top.top}}" alt="">
+                    {% endif %}
+                </div>
+                <div class="cube-face"></div>
+                <div class="cube-face"></div>
+                <div class="cube-face"></div>
+                <div class="cube-face"></div>
+                <div class="cube-face"></div>
+            </div>
+            <div class="cube" id="c2">
+                <div class="cube-face"> 
+                    {% if from_photo %}
+                        <img src="{{from_photo.middle}}" alt="">
+                    {% elif edit_sandwich %}
+                        <img src="{{edit_sandwich.middle.middle}}" alt="">
+                    {% elif from_sandwich %}
+                        <img src="{{from_sandwich.middle.middle}}" alt="">
+                    {% endif %} 
+                </div>
+                <div class="cube-face"></div>
+                <div class="cube-face"></div>
+                <div class="cube-face"></div>
+                <div class="cube-face"></div>
+            </div>
+            <div class="cube" id="c3">
+                <div class="cube-face"> 
+                    {% if from_photo %}
+                        <img src="{{from_photo.bottom}}" alt="">
+                    {% elif edit_sandwich %}
+                        <img src="{{edit_sandwich.bottom.bottom}}" alt="">
+                    {% elif from_sandwich %}
+                        <img src="{{from_sandwich.bottom.bottom}}" alt="">
+                    {% endif %}
+                </div>
+                <div class="cube-face"></div>
+                <div class="cube-face"></div>
+                <div class="cube-face"></div>
+                <div class="cube-face"></div>
+                <div class="cube-face"></div>
+            </div>
+        </div>
+    </div>
+
+    <form id="form" action="#" method="POST" class="text-align-center">
+        {% csrf_token %}
+        <button type="submit">
+            {% if edit_sandwich %}
+            Ok that's better - Update my sandwich
+            {% else %}
+            Amazing Sandwich - Save it!
+            {% endif %}
+        </button>
+    </form>
+</article>
+{% endblock %}
